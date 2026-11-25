@@ -1,0 +1,97 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Administración - Reserva de vuelos{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">✈ Reserva de vuelos</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --rojo-vino: #650000;
+        --rojo-intenso: #B51217;
+        --gris-fondo: #F0EFF2;
+        --azul-oscuro: #243746;
+        --blanco: #FFFFFF;
+    }
+
+    body {
+        background: var(--gris-fondo);
+        color: var(--azul-oscuro);
+    }
+
+    #header {
+        background: linear-gradient(100deg, #650000, #B51217);
+        color: var(--blanco);
+    }
+
+    #header a:link,
+    #header a:visited {
+        color: var(--blanco);
+    }
+
+    #branding h1 {
+        font-weight: bold;
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: var(--rojo-vino);
+        color: var(--blanco);
+    }
+
+    .breadcrumbs {
+        background: #B51217;
+        color: var(--blanco);
+    }
+
+    .breadcrumbs a {
+        color: var(--blanco);
+    }
+
+    a:link,
+    a:visited {
+        color: var(--rojo-vino);
+    }
+
+    a:hover {
+        color: var(--rojo-intenso);
+    }
+
+    .button,
+    input[type="submit"],
+    input[type="button"],
+    .submit-row input {
+        background: var(--rojo-vino);
+        color: var(--blanco);
+        border-radius: 7px;
+        border: none;
+        padding: 9px 15px;
+    }
+
+    .button:hover,
+    input[type="submit"]:hover,
+    .submit-row input:hover {
+        background: var(--rojo-intenso);
+    }
+
+    .selector-chosen h2 {
+        background: var(--rojo-vino) !important;
+    }
+
+    #content {
+        background: var(--gris-fondo);
+    }
+
+    .module,
+    .results {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

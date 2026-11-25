@@ -1,0 +1,35 @@
+{% extends 'vuelos/base.html' %}
+{% load permisos_tags %}
+
+{% block titulo %}Reserva {{ reserva.codigo }}{% endblock %}
+
+{% block contenido %}
+<h1>Reserva {{ reserva.codigo }}</h1>
+<dl>
+    <dt>Vuelo</dt><dd><a href="{{ reserva.vuelo.get_absolute_url }}">{{ reserva.vuelo }}</a></dd>
+    <dt>Clase</dt><dd>{{ reserva.get_clase_display }}</dd>
+    <dt>Estado</dt><dd>{{ reserva.get_estado_display }}</dd>
+    <dt>Fecha de reserva</dt><dd>{{ reserva.fecha_reserva|date:"d/m/Y" }}</dd>
+    <dt>Total</dt><dd>$ {{ reserva.total }}</dd>
+    <dt>Creada por</dt><dd>{{ reserva.creado_por.username|default:"-" }}</dd>
+</dl>
+
+<h2>Pasajeros</h2>
+<ul>
+    {% for pasajero in pasajeros %}
+        <li><a href="{{ pasajero.get_absolute_url }}">{{ pasajero }}</a> - {{ pasajero.documento }}</li>
+    {% empty %}
+        <li>Sin pasajeros.</li>
+    {% endfor %}
+</ul>
+
+<p>
+    <a class="boton boton-secundario" href="{% url 'reserva_list' %}">Volver al listado</a>
+    {% if perms.vuelos.change_reserva and reserva|puede_modificar:user %}
+        <a class="boton" href="{% url 'reserva_update' reserva.pk %}">Editar</a>
+    {% endif %}
+    {% if perms.vuelos.delete_reserva and reserva|puede_modificar:user %}
+        <a class="boton boton-peligro" href="{% url 'reserva_delete' reserva.pk %}">Eliminar</a>
+    {% endif %}
+</p>
+{% endblock %}

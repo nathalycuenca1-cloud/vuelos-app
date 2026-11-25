@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}Reserva de vuelos{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'vuelos/css/estilos.css' %}">
+</head>
+<body>
+    <header class="barra">
+        <a class="marca" href="{% url 'inicio' %}">Reserva de vuelos</a>
+        <nav>
+            {% if user.is_authenticated %}
+                {% if perms.vuelos.view_aerolinea %}<a href="{% url 'aerolinea_list' %}">Aerolíneas</a>{% endif %}
+                {% if perms.vuelos.view_vuelo %}<a href="{% url 'vuelo_list' %}">Vuelos</a>{% endif %}
+                {% if perms.vuelos.view_pasajero %}<a href="{% url 'pasajero_list' %}">Pasajeros</a>{% endif %}
+                {% if perms.vuelos.view_reserva %}<a href="{% url 'reserva_list' %}">Reservas</a>{% endif %}
+                <span class="usuario">Usuario: {{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" class="en-linea">
+                    {% csrf_token %}
+                    <button type="submit" class="boton boton-secundario">Salir</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Entrar</a>
+                <a href="{% url 'registro' %}">Registrarse</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="contenedor">
+        {% if messages %}
+            <ul class="mensajes">
+                {% for message in messages %}
+                    <li class="mensaje {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>

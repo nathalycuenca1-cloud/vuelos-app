@@ -1,0 +1,9 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}Acceso denegado{% endblock %}
+
+{% block contenido %}
+<h1>403 - Acceso denegado</h1>
+<p>No tiene permiso para realizar esta acción.</p>
+<p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+{% endblock %}

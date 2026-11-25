@@ -1,0 +1,31 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}{{ pasajero.nombre_completo }}{% endblock %}
+
+{% block contenido %}
+<h1>{{ pasajero.nombre_completo }}</h1>
+<dl>
+    <dt>Documento</dt><dd>{{ pasajero.documento }}</dd>
+    <dt>Correo</dt><dd>{{ pasajero.email }}</dd>
+    <dt>Fecha de nacimiento</dt><dd>{{ pasajero.fecha_nacimiento|date:"d/m/Y" }}</dd>
+    <dt>Nacionalidad</dt><dd>{{ pasajero.nacionalidad }}</dd>
+</dl>
+
+<h2>Reservas de este pasajero</h2>
+<ul>
+    {% for reserva in reservas %}
+        <li>
+            <a href="{{ reserva.get_absolute_url }}">{{ reserva.codigo }}</a>
+            - vuelo <a href="{{ reserva.vuelo.get_absolute_url }}">{{ reserva.vuelo.codigo }}</a>
+        </li>
+    {% empty %}
+        <li>Este pasajero no tiene reservas.</li>
+    {% endfor %}
+</ul>
+
+<p>
+    <a class="boton boton-secundario" href="{% url 'pasajero_list' %}">Volver al listado</a>
+    {% if perms.vuelos.change_pasajero %}<a class="boton" href="{% url 'pasajero_update' pasajero.pk %}">Editar</a>{% endif %}
+    {% if perms.vuelos.delete_pasajero %}<a class="boton boton-peligro" href="{% url 'pasajero_delete' pasajero.pk %}">Eliminar</a>{% endif %}
+</p>
+{% endblock %}

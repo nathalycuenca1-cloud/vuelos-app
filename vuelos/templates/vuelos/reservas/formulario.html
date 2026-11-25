@@ -7,7 +7,40 @@
 <form method="post" novalidate>
     {% csrf_token %}
     {{ form.as_p }}
+    <p>Total estimado: <strong id="total-estimado">---</strong></p>
+    {% if perms.vuelos.add_pasajero %}<p>¿Falta un pasajero? <a href="{% url 'pasajero_create' %}">Registrar pasajero</a></p>{% endif %}
     <button type="submit" class="boton">Guardar</button>
     <a class="boton boton-secundario" href="{% url 'reserva_list' %}">Cancelar</a>
 </form>
+{{ form.datos_total|json_script:"datos-total" }}
+<script>
+    const datos = JSON.parse(document.getElementById('datos-total').textContent);
+    const vuelo = document.getElementById('id_vuelo');
+    const clase = document.getElementById('id_clase');
+    const casillas = document.querySelectorAll('input[name="pasajeros"]');
+    const salida = document.getElementById('total-estimado');
+
+    function actualizar() {
+        const precio = parseFloat(datos.precios[vuelo.value]);
+        const factor = parseFloat(datos.factores[clase.value]);
+        let cantidad = 0;
+        casillas.forEach(function (casilla) {
+            if (casilla.checked) {
+                cantidad += 1;
+            }
+        });
+        if (!precio || cantidad === 0) {
+            salida.textContent = '---';
+            return;
+        }
+        salida.textContent = '$ ' + (precio * cantidad * factor).toFixed(2).replace('.', ',');
+    }
+
+    vuelo.addEventListener('change', actualizar);
+    clase.addEventListener('change', actualizar);
+    casillas.forEach(function (casilla) {
+        casilla.addEventListener('change', actualizar);
+    });
+    actualizar();
+</script>
 {% endblock %}

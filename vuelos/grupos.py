@@ -18,7 +18,10 @@ def crear_grupos():
     administradores.permissions.set(permisos_admin)
 
     codigos_consultor = [f'view_{modelo}' for modelo in MODELOS]
-    codigos_consultor += ['add_reserva', 'change_reserva', 'delete_reserva']
+    codigos_consultor += [
+        'add_reserva', 'change_reserva', 'delete_reserva',
+        'add_pasajero', 'change_pasajero', 'delete_pasajero',
+    ]
     permisos_consultor = Permission.objects.filter(
         content_type__app_label='vuelos',
         codename__in=codigos_consultor,

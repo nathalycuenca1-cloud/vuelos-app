@@ -1,9 +1,10 @@
 {% extends 'vuelos/base.html' %}
+{% load permisos_tags %}
 
-{% block titulo %}Pasajeros{% endblock %}
+{% block titulo %}{% if perms.vuelos.add_aerolinea %}Pasajeros{% else %}Datos de viaje{% endif %}{% endblock %}
 
 {% block contenido %}
-<h1>Pasajeros</h1>
+<h1>{% if perms.vuelos.add_aerolinea %}Pasajeros{% else %}Datos de viaje{% endif %}</h1>
 {% if perms.vuelos.add_pasajero %}
     <p><a class="boton" href="{% url 'pasajero_create' %}">Nuevo pasajero</a></p>
 {% endif %}
@@ -20,12 +21,12 @@
                 <td>{{ pasajero.nacionalidad }}</td>
                 <td>
                     <a href="{{ pasajero.get_absolute_url }}">Ver</a>
-                    {% if perms.vuelos.change_pasajero %}<a href="{% url 'pasajero_update' pasajero.pk %}">Editar</a>{% endif %}
-                    {% if perms.vuelos.delete_pasajero %}<a href="{% url 'pasajero_delete' pasajero.pk %}">Eliminar</a>{% endif %}
+                    {% if perms.vuelos.change_pasajero and pasajero|puede_modificar:user %}<a href="{% url 'pasajero_update' pasajero.pk %}">Editar</a>{% endif %}
+                    {% if perms.vuelos.delete_pasajero and pasajero|puede_modificar:user %}<a href="{% url 'pasajero_delete' pasajero.pk %}">Eliminar</a>{% endif %}
                 </td>
             </tr>
         {% empty %}
-            <tr><td colspan="5">No hay pasajeros registrados.</td></tr>
+            <tr><td colspan="5">No hay pasajeros registrados. Use Nuevo pasajero para registrar a quienes van a viajar.</td></tr>
         {% endfor %}
     </tbody>
 </table>

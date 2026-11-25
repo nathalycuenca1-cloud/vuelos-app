@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
@@ -9,6 +10,13 @@ class Pasajero(models.Model):
     email = models.EmailField()
     fecha_nacimiento = models.DateField()
     nacionalidad = models.CharField(max_length=60, default='Ecuatoriana')
+    creado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='pasajeros_creados',
+    )
 
     class Meta:
         ordering = ['apellidos', 'nombres']

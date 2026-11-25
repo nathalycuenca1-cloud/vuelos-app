@@ -14,7 +14,7 @@
             {% if user.is_authenticated %}
                 {% if perms.vuelos.view_aerolinea %}<a href="{% url 'aerolinea_list' %}">Aerolíneas</a>{% endif %}
                 {% if perms.vuelos.view_vuelo %}<a href="{% url 'vuelo_list' %}">Vuelos</a>{% endif %}
-                {% if perms.vuelos.view_pasajero %}<a href="{% url 'pasajero_list' %}">Pasajeros</a>{% endif %}
+                {% if perms.vuelos.view_pasajero %}<a href="{% url 'pasajero_list' %}">{% if perms.vuelos.add_aerolinea %}Pasajeros{% else %}Datos de viaje{% endif %}</a>{% endif %}
                 {% if perms.vuelos.view_reserva %}<a href="{% url 'reserva_list' %}">Reservas</a>{% endif %}
                 <span class="usuario">Usuario: {{ user.username }}</span>
                 <form method="post" action="{% url 'logout' %}" class="en-linea">

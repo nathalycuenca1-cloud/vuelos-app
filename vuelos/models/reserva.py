@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -14,6 +16,12 @@ class Reserva(models.Model):
         PENDIENTE = 'PEN', 'Pendiente'
         CONFIRMADA = 'CON', 'Confirmada'
         CANCELADA = 'CAN', 'Cancelada'
+
+    FACTORES_CLASE = {
+        'ECO': Decimal('1.00'),
+        'EJE': Decimal('1.80'),
+        'PRI': Decimal('2.60'),
+    }
 
     codigo = models.CharField(max_length=12, unique=True)
     vuelo = models.ForeignKey(
@@ -55,3 +63,8 @@ class Reserva(models.Model):
 
     def get_absolute_url(self):
         return reverse('reserva_detail', kwargs={'pk': self.pk})
+
+    @classmethod
+    def calcular_total(cls, vuelo, clase, cantidad_pasajeros):
+        total = vuelo.precio * cantidad_pasajeros * cls.FACTORES_CLASE[clase]
+        return total.quantize(Decimal('0.01'))

@@ -27,7 +27,7 @@ def reserva_detail(request, pk):
 @permission_required('vuelos.add_reserva', raise_exception=True)
 def reserva_create(request):
     if request.method == 'POST':
-        form = ReservaForm(request.POST)
+        form = ReservaForm(request.POST, user=request.user)
         if form.is_valid():
             reserva = form.save(commit=False)
             reserva.creado_por = request.user
@@ -36,7 +36,7 @@ def reserva_create(request):
             messages.success(request, 'Reserva creada exitosamente.')
             return redirect(reserva)
     else:
-        form = ReservaForm()
+        form = ReservaForm(user=request.user)
     return render(request, 'vuelos/reservas/formulario.html', {'form': form, 'titulo': 'Nueva reserva'})
 
 
@@ -47,13 +47,13 @@ def reserva_update(request, pk):
     if not puede_modificar(request.user, reserva):
         raise PermissionDenied
     if request.method == 'POST':
-        form = ReservaForm(request.POST, instance=reserva)
+        form = ReservaForm(request.POST, instance=reserva, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Reserva actualizada exitosamente.')
             return redirect(reserva)
     else:
-        form = ReservaForm(instance=reserva)
+        form = ReservaForm(instance=reserva, user=request.user)
     return render(request, 'vuelos/reservas/formulario.html', {'form': form, 'titulo': 'Editar reserva'})
 
 

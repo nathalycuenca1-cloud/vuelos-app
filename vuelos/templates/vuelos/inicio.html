@@ -3,15 +3,43 @@
 {% block titulo %}Inicio - Reserva de vuelos{% endblock %}
 
 {% block contenido %}
-<h1>Sistema de reserva de vuelos</h1>
-<p>Administre aerolíneas, vuelos, pasajeros y reservas.</p>
-<ul class="resumen">
-    <li>Aerolíneas registradas: <strong>{{ total_aerolineas }}</strong></li>
-    <li>Vuelos: <strong>{{ total_vuelos }}</strong></li>
-    <li>Pasajeros: <strong>{{ total_pasajeros }}</strong></li>
-    <li>Reservas: <strong>{{ total_reservas }}</strong></li>
-</ul>
-{% if not user.is_authenticated %}
-    <p>Inicie sesión o cree una cuenta para continuar.</p>
+<section class="hero">
+    <p class="hero-etiqueta">{% if user.is_authenticated %}Hola, {{ user.username }}{% else %}Bienvenido{% endif %}</p>
+    <h1>¿A dónde quieres viajar?</h1>
+    <p class="hero-texto">Elige un vuelo, confirma quién viaja y el sistema calcula tu total.</p>
+    <div class="hero-acciones">
+        {% if user.is_authenticated %}
+            {% if perms.vuelos.add_reserva %}<a class="boton" href="{% url 'reserva_create' %}">Nueva reserva</a>{% endif %}
+            {% if perms.vuelos.view_reserva %}<a class="boton boton-claro" href="{% url 'reserva_list' %}">Ver reservas</a>{% endif %}
+        {% else %}
+            <a class="boton" href="{% url 'registro' %}">Crear cuenta</a>
+            <a class="boton boton-claro" href="{% url 'login' %}">Iniciar sesión</a>
+        {% endif %}
+    </div>
+</section>
+
+<h2>Próximos vuelos</h2>
+<div class="vuelos-grid">
+    {% for vuelo in vuelos_destacados %}
+        <article class="vuelo-card">
+            <p class="vuelo-aerolinea">{{ vuelo.aerolinea }} · {{ vuelo.codigo }}</p>
+            <p class="vuelo-ruta">{{ vuelo.origen }} <span>→</span> {{ vuelo.destino }}</p>
+            <p class="vuelo-fecha">{{ vuelo.fecha_salida|date:"d/m/Y H:i" }}</p>
+            <p class="vuelo-precio">desde <strong>$ {{ vuelo.precio }}</strong></p>
+            {% if perms.vuelos.view_vuelo %}<a href="{{ vuelo.get_absolute_url }}">Ver detalle</a>{% endif %}
+        </article>
+    {% empty %}
+        <p>No hay vuelos programados por ahora.</p>
+    {% endfor %}
+</div>
+
+{% if perms.vuelos.add_aerolinea %}
+    <h2>Resumen del sistema</h2>
+    <ul class="resumen">
+        <li>Aerolíneas registradas: <strong>{{ total_aerolineas }}</strong></li>
+        <li>Vuelos: <strong>{{ total_vuelos }}</strong></li>
+        <li>Pasajeros: <strong>{{ total_pasajeros }}</strong></li>
+        <li>Reservas: <strong>{{ total_reservas }}</strong></li>
+    </ul>
 {% endif %}
 {% endblock %}

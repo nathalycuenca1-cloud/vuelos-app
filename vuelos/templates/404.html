@@ -1,0 +1,9 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}No encontrado{% endblock %}
+
+{% block contenido %}
+<h1>404 - Página no encontrada</h1>
+<p>El registro solicitado no existe.</p>
+<p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+{% endblock %}

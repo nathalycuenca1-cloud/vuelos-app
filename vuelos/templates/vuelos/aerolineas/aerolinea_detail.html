@@ -1,0 +1,27 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}{{ aerolinea.nombre }}{% endblock %}
+
+{% block contenido %}
+<h1>{{ aerolinea.nombre }}</h1>
+<dl>
+    <dt>Código IATA</dt><dd>{{ aerolinea.codigo_iata }}</dd>
+    <dt>País</dt><dd>{{ aerolinea.pais }}</dd>
+    <dt>Activa</dt><dd>{{ aerolinea.activa|yesno:"Sí,No" }}</dd>
+</dl>
+
+<h2>Vuelos de esta aerolínea</h2>
+<ul>
+    {% for vuelo in vuelos %}
+        <li><a href="{{ vuelo.get_absolute_url }}">{{ vuelo }}</a> - {{ vuelo.fecha_salida|date:"d/m/Y H:i" }}</li>
+    {% empty %}
+        <li>Esta aerolínea no tiene vuelos.</li>
+    {% endfor %}
+</ul>
+
+<p>
+    <a class="boton boton-secundario" href="{% url 'aerolinea_list' %}">Volver al listado</a>
+    {% if perms.vuelos.change_aerolinea %}<a class="boton" href="{% url 'aerolinea_update' aerolinea.pk %}">Editar</a>{% endif %}
+    {% if perms.vuelos.delete_aerolinea %}<a class="boton boton-peligro" href="{% url 'aerolinea_delete' aerolinea.pk %}">Eliminar</a>{% endif %}
+</p>
+{% endblock %}

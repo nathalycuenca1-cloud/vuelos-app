@@ -1,0 +1,13 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}Eliminar aerolínea{% endblock %}
+
+{% block contenido %}
+<h1>Eliminar aerolínea</h1>
+<p>¿Está seguro de que desea eliminar <strong>{{ aerolinea.nombre }}</strong>? Esta acción no se puede deshacer.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="boton boton-peligro">Sí, eliminar</button>
+    <a class="boton boton-secundario" href="{{ aerolinea.get_absolute_url }}">Cancelar</a>
+</form>
+{% endblock %}

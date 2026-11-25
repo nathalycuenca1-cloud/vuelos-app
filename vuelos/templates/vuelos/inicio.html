@@ -1,0 +1,17 @@
+{% extends 'vuelos/base.html' %}
+
+{% block titulo %}Inicio - Reserva de vuelos{% endblock %}
+
+{% block contenido %}
+<h1>Sistema de reserva de vuelos</h1>
+<p>Administre aerolíneas, vuelos, pasajeros y reservas.</p>
+<ul class="resumen">
+    <li>Aerolíneas registradas: <strong>{{ total_aerolineas }}</strong></li>
+    <li>Vuelos: <strong>{{ total_vuelos }}</strong></li>
+    <li>Pasajeros: <strong>{{ total_pasajeros }}</strong></li>
+    <li>Reservas: <strong>{{ total_reservas }}</strong></li>
+</ul>
+{% if not user.is_authenticated %}
+    <p>Inicie sesión o cree una cuenta para continuar.</p>
+{% endif %}
+{% endblock %}
